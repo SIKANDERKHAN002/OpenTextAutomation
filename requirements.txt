@@ -1,0 +1,11 @@
+pytest
+selenium
+requests
+pytest-html
+pytest-xdist
+pandas
+matplotlib
+allure-pytest
+pytest-rerunfailures
+
+
