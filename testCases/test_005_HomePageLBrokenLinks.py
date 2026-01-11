@@ -30,6 +30,8 @@ class Test_Broken_Links:
             
             if url and url.startswith("http"):
                try:
+                   print(f"{counter} \t {url}")
+                   counter+=1
                    # Use requests to send a HEAD request (more efficient than GET as it only retrieves headeaders"
                    # allow_redirects = True ensures we follow redirects and check the final destination 
                    response = requests.head(url,timeout=5)
