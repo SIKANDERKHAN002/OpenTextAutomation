@@ -8,6 +8,7 @@ import  pytest
 class Test_ForgottenPassword:
     base_URL = ReadConfig.get("baseURL")
     
+    @pytest.mark.smoke
     def test_forgettonPassword(self,setUp):
         self.driver = setUp
         self.driver.get(self.base_URL)
