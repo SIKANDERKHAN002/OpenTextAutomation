@@ -48,7 +48,7 @@ testCases/test_006_ForgettenPassword.py
 echo Shutting down Docker containers...
 docker-compose down
 :: ====================================================
-:: Step 8: Generate and open Allure report
+:: Step 8: Generate and open Allure reports
 :: ====================================================
 echo Generating and opening Allure report...
 allure generate %ALLURE_RESULTS% -o %ALLURE_HTML% --clean && allure open %ALLURE_HTML%
