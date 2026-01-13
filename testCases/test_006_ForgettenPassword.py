@@ -21,6 +21,12 @@ class Test_ForgottenPassword:
         
         self.hm.clickMyAccount()
         self.driver.implicitly_wait(5)
+        
         self.lg.clickLinkLogin()
-        self.lg.forgottenPassword(self)
+        self.lg.forgottenPassword()
+        
+        self.lg.setTextEmail("random@gmail.com")
+        self.lg.clickContinue()
+        self.lg.validateEmailMessageNotFound()
+        
         time.sleep(10)   
