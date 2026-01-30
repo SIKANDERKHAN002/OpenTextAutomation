@@ -27,6 +27,7 @@ class Test_ForgottenPassword:
         
         self.lg.setTextEmail("random@gmail.com")
         self.lg.clickContinue()
-        self.lg.validateEmailMessageNotFound()
-        
+        validationdata = self.lg.validateEmailMessageNotFound()
+        print(f"Data ==> {validationdata}")
+        assert   validationdata == "Warning: The E-Mail Address was not found in our records, please try again!",   "Validation failed" 
         time.sleep(10)   
