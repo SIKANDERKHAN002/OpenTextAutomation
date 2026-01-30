@@ -1,0 +1,1 @@
+{"4c71c7c01d9c71752912399994cd7e19":{"statistic":{"failed":0,"broken":1,"skipped":0,"passed":0,"unknown":0,"total":1},"items":[{"uid":"45a28cfde652c79","status":"broken","statusDetails":"TypeError: LoginPage.forgottenPassword() takes 1 positional argument but 2 were given","time":{"start":1768396580580,"stop":1768396582752,"duration":2172}}]}}
