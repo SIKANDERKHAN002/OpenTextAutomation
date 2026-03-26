@@ -51,3 +51,4 @@ class Test_008:
            print("Browser closed and session ended.")
       #This i will remove from here
       print("HELLO NEED TO REMOVE")     
+      print("ADDED HERE TO TEST")
