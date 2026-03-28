@@ -9,9 +9,20 @@ import allure
 
 @pytest.fixture()
 def setUp(request):
+    """
+    1.@pytest.fixture → setup/teardown handler
+    2.yield → separates setup & cleanup
+    3.request.cls.driver → makes driver available in class
+    4.EventFiringWebDriver → adds logging capability
+    5.special pytest object used to access test context (like class)
+    6.setUp will run before each test
+    7.request → special pytest object used to access test context (like class)
+    """
     options = webdriver.ChromeOptions()
     options.add_experimental_option("detach",True)
     driver = webdriver.Chrome(options=options)
+    #Wraps your driver with an event listener
+    #WebDriverLogger() → custom class (you created) to log actions
     event_driver = EventFiringWebDriver(driver, WebDriverLogger())
     request.cls.driver = event_driver
     yield event_driver
