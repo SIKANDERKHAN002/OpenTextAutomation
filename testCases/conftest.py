@@ -4,31 +4,69 @@ from selenium import webdriver
 from allure_commons.types import AttachmentType
 from selenium.webdriver.support.events import EventFiringWebDriver,AbstractEventListener
 import os
+from pytest_metadata.plugin import metadata_key
 from datetime import datetime
 import allure
+from utilities.readProperties import ReadConfig
+
+
 
 @pytest.fixture()
-def setUp(request):
-    """
-    1.@pytest.fixture → setup/teardown handler
-    2.yield → separates setup & cleanup
-    3.request.cls.driver → makes driver available in class
-    4.EventFiringWebDriver → adds logging capability
-    5.special pytest object used to access test context (like class)
-    6.setUp will run before each test
-    7.request → special pytest object used to access test context (like class)
-    """
-    options = webdriver.ChromeOptions()
-    options.add_experimental_option("detach",True)
-    driver = webdriver.Chrome(options=options)
-    #Wraps your driver with an event listener
-    #WebDriverLogger() → custom class (you created) to log actions
+def setUp(request,browser_platform):
+    baseenv = ReadConfig.get('execution_env')
+    browser,platform = browser_platform
+
+    if baseenv == "remote":
+        options = {
+            "chrome": webdriver.ChromeOptions,
+            "edge": webdriver.EdgeOptions,
+            "firefox": webdriver.FirefoxOptions
+        }
+        platform_mapping = {"windows": "WIN10", "mac": "MAC", "linux": "LINUX"}
+        platform_name = platform_mapping.get(platform)
+        opt = options[browser]()
+        opt.add_experimental_option("detach",True) if browser in ["chrome","edge"] else None
+        opt.platform_name = platform_name
+        driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub",options=opt)
+    elif baseenv == "local":
+       if browser == 'edge':
+           options = webdriver.EdgeOptions()
+           options.add_experimental_option("detach", True)
+           driver = webdriver.Edge(options=options)
+           print("Launching Edge browser.........")
+       elif browser == 'firefox':
+           options = webdriver.FirefoxOptions()
+           driver = webdriver.Firefox(options=options)
+           print("Launching Firefox browser.........")
+       else:
+           options = webdriver.ChromeOptions()
+           options.add_experimental_option("detach", True)
+           driver = webdriver.Chrome(options=options)
+           print("Launching Chrome browser.........")
+           
+        # Wrap original driver with EventFiringWebDriver
     event_driver = EventFiringWebDriver(driver, WebDriverLogger())
+
+    # If using class-based tests
     request.cls.driver = event_driver
-    yield event_driver
+    yield driver
     event_driver.quit()
     
-      
+
+# CLI argument hook
+def pytest_addoption(parser):
+   parser.addoption("--browser",default="chrome")
+   parser.addoption("--os",default="linux")
+   
+   
+# Fixture to fetch browser option
+@pytest.fixture()
+def browser_platform(request):
+   browser =  request.config.getoption("--browser")
+   os =  request.config.getoption("--os")
+   return browser, os
+
+
 @pytest.hookimpl(tryfirst=True,hookwrapper=True)  #capture screenshot on failure
 def pytest_runtest_makereport(item,call):
     """
@@ -109,8 +147,27 @@ class WebDriverLogger(AbstractEventListener):
 def pytest_configure(config):
     config.option.htmlpath = ( os.path.abspath(os.getcwd()) + "\\reports\\" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".html")
 
+
 @pytest.fixture(scope="function", autouse=True)
 def log_test_start_end(request):
     logger.info(f"===== START TEST: {request.node.name} =====")
     yield
     logger.info(f"===== END TEST: {request.node.name} =====")
+    
+
+# Hook 1: Configure report path and add custom metadata
+@pytest.hookimpl(optionalhook=True)
+def pytest_configure(config):
+    # config.option.htmlpath = (
+    #         os.path.abspath(os.getcwd()) + "\\reports\\" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".html"
+    # )
+    config.stash[metadata_key]['Project Name'] = 'Pytest_Automation'
+    config.stash[metadata_key]['Module Name'] = 'Register_Login_Search'
+    config.stash[metadata_key]['Tester Name'] = 'SIKANDER'
+
+
+# Hook 2: Remove default metadata
+@pytest.hookimpl(optionalhook=True)
+def pytest_metadata(metadata):
+    metadata.pop("Python", None)
+    metadata.pop("Plugins", None)    
