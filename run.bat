@@ -38,17 +38,17 @@ del %PYTEST_HTML%
 :: ====================================================
 echo Running tests...
 pytest -s -v ^
---reruns=2 --reruns-delay=2 ^
+--reruns=0 --reruns-delay=2 ^
 --alluredir=%ALLURE_RESULTS% ^
 --html=%PYTEST_HTML% --self-contained-html ^
-testCases/test_006_ForgettenPassword.py
+testCases/test_001_AccountRegistration.py
 :: ====================================================
 :: Step 7: Shut down Docker containers
 :: ====================================================
 echo Shutting down Docker containers...
 docker-compose down
 :: ====================================================
-:: Step 8: Generate and open Allure reports
+:: Step 8: Generate and open Allure report
 :: ====================================================
 echo Generating and opening Allure report...
 allure generate %ALLURE_RESULTS% -o %ALLURE_HTML% --clean && allure open %ALLURE_HTML%
