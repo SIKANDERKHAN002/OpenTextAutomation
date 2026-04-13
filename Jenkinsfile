@@ -34,7 +34,7 @@ pipeline {
        stage('Checkout Code') {
            steps {
                echo 'Checking out code from GitHub...'
-               git url: 'https://github.com/SIKANDERKHAN002/OpenTextAutomation.git'
+               git branch: 'main',git url: 'https://github.com/SIKANDERKHAN002/OpenTextAutomation.git'
            }
        }
        stage('Clean Old Reports') {
