@@ -8,4 +8,4 @@ matplotlib
 allure-pytest
 pytest-rerunfailures
 openpyxl
-
+faker
