@@ -1,12 +1,12 @@
 import pytest
 import logging
+import allure
+import os
 from selenium import webdriver
 from allure_commons.types import AttachmentType
 from selenium.webdriver.support.events import EventFiringWebDriver,AbstractEventListener
-import os
 from pytest_metadata.plugin import metadata_key
 from datetime import datetime
-import allure
 from utilities.readProperties import ReadConfig
 
 
@@ -46,6 +46,9 @@ def setUp(request,browser_platform):
            
         # Wrap original driver with EventFiringWebDriver
     event_driver = EventFiringWebDriver(driver, WebDriverLogger())
+    
+    # Add implicit wait here
+    event_driver.implicitly_wait(10)
 
     # If using class-based tests
     request.cls.driver = event_driver
