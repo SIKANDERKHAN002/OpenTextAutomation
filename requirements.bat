@@ -6,3 +6,4 @@ pip install pytest-ordering
 pip install openpyxl
 pip install allure-pytest
 pip install pytest-rerunfailures
+pip install faker
