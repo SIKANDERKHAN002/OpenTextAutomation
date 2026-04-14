@@ -10,6 +10,13 @@ import time
 
 @allure.severity(allure.severity_level.CRITICAL)
 class Test_001_AccountReg:
+    """
+    Test class for account registration functionality.
+
+    This class verifies whether a new user can successfully
+    register an account in the application.
+    """
+    
     baseURL = ReadConfig.get('baseURL')
     email = randomString.random_string_generator()
     @pytest.mark.regression
