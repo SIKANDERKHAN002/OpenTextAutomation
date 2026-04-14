@@ -42,7 +42,6 @@ class Test_Login:
         self.driver = setUp
         self.driver.get(self.baseURL)
         self.driver.maximize_window()
-        self.driver.implicitly_wait(10)
         self.hp = HomePage(self.driver)
         self.hp.clickMyAccount()
         self.hp.clickLogin()
